@@ -25,10 +25,10 @@ def write_data():
             results = get_data()
             for key, value in results.items():
                 if key == 'jobs_results':
-                        for item in value:
-                            for key in item.keys():
-                                f.write(f"{key} : {item.get(key)}\n")
-                            f.write(f"\n")
+                    for item in value:
+                        for key2 in item.keys():
+                            f.write(f"{key2} : {item.get(key2)}\n")
+                        f.write("\n")
             params["start"] += 10
 
 
