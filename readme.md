@@ -7,7 +7,7 @@ google-search-results:\
 serpapi:\
     &nbsp;&nbsp;&nbsp;&nbsp;pip install serpapi\
 secrets.py:\
-    &nbsp;&nbsp;&nbsp;&nbsp;create a secrets.py file in the project's directory and add this line with your api key:
+    &nbsp;&nbsp;&nbsp;&nbsp;create a secrets.py file in the project's directory and add this line with your api key:\
     &nbsp;&nbsp;&nbsp;&nbsp;secretkey = "enter key here"
 
 Description:\
