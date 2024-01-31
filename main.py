@@ -1,7 +1,6 @@
 from serpapi import GoogleSearch
 import secrets
 
-#pagenum = 0
 params = {
     "engine": "google_jobs",
     "google_domain": "google.com",
@@ -27,8 +26,6 @@ def write_data():
             for key, value in results.items():
                 if key == 'jobs_results':
                     f.write(f"{value}\n")
-                    #for value in key2:
-                        #f.write(f"{key2} : {value}\n")
             params["start"] += 10
 
 
