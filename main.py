@@ -15,7 +15,6 @@ params = {
 }
 
 
-
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
     db_connection = sqlite3.connect(filename)
     cursor = db_connection.cursor()
@@ -23,7 +22,7 @@ def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
 
 
 def close_db(connection: sqlite3.Connection):
-    connection.commit() 
+    connection.commit()
     connection.close()
 
 
