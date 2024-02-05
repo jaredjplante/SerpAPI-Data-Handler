@@ -15,6 +15,7 @@ params = {
 }
 
 
+
 def open_db(filename: str) -> Tuple[sqlite3.Connection, sqlite3.Cursor]:
     db_connection = sqlite3.connect(filename)
     cursor = db_connection.cursor()
@@ -49,7 +50,7 @@ def setup_db(cursor: sqlite3.Cursor):
     );''')
 
 
-def get_data():
+def get_data():  # add comment to test workflow
     search = GoogleSearch(params)
     results = search.get_dict()
     return results
