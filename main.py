@@ -81,7 +81,7 @@ def format_data(cursor: sqlite3.Cursor):
                     description = 'na'
                     salary = 'Not Specified'
                     remote = 'Not Specified'
-                    qualifications = 'na'
+                    qualif = 'na'
                     for key2 in item.keys():
                         #     f.write(f"{key2} : {item.get(key2)}\n")
                         # f.write("\n")
@@ -94,23 +94,28 @@ def format_data(cursor: sqlite3.Cursor):
                         elif key2 == 'description':
                             description = item.get(key2)
                         elif key2 == 'extensions':
-                            age = item.get(key2)[1]
-                            if item.get(key2)[2] == 'Work from home':
-                                remote = 'yes'
+                            age = item.get(key2)[0]
+                            if len(item.get(key2)) >= 2:
+                                if item.get(key2)[1] == 'Work from home':
+                                    remote = 'yes'
                         elif key2 == 'job_highlights':
-                            qualifications = item.get(key2)[1]
-                    write_to_database(title, company, location, age, description, salary, remote, qualifications)
+                            qualif = item.get(key2)[0]
+                            #qualif = 'hello'
+                    write_to_database(title, company, location, age, description, salary, remote, qualif, cursor)
 
         params["start"] += 10
 
 
-def write_to_database(title, company, location, age, description, salary, remote, qualifications):
-    print("hello")
+def write_to_database(title, company, location, age, description, salary, remote, qualif, cursor: sqlite3.Cursor):
+    cursor.execute(f'''INSERT INTO LISTINGS (title, company, location, salary, remote, age, description)
+    VALUES(?, ?, ?, ?, ?, ?, ?)''',
+                   (title, company, location, salary, remote, age, description))
 
 
 def main():
     conn, cursor = open_db("JobData.sqlite")
     setup_db(cursor)
+    format_data(cursor)
     close_db(conn)
 
 
