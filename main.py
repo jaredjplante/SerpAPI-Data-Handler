@@ -55,19 +55,6 @@ def get_data():  # add comment to test workflow
     return results
 
 
-# def write_data():
-#     with open('JobData.txt', 'a', encoding='utf-8') as f:
-#         while params["start"] < 41:
-#             results = get_data()
-#             for key, value in results.items():
-#                 if key == 'jobs_results':
-#                     for item in value:
-#                         for key2 in item.keys():
-#                             f.write(f"{key2} : {item.get(key2)}\n")
-#                         f.write("\n")
-#             params["start"] += 10
-
-
 def format_data(cursor: sqlite3.Cursor):
     while params["start"] < 41:
         results = get_data()
@@ -81,10 +68,8 @@ def format_data(cursor: sqlite3.Cursor):
                     description = 'na'
                     salary = 'Not Specified'
                     remote = 'Not Specified'
-                    qualif = 'na'
+                    qualif = 'Not Specified'
                     for key2 in item.keys():
-                        #     f.write(f"{key2} : {item.get(key2)}\n")
-                        # f.write("\n")
                         if key2 == 'title':
                             title = item.get(key2)
                         elif key2 == 'company_name':
@@ -99,8 +84,10 @@ def format_data(cursor: sqlite3.Cursor):
                                 if item.get(key2)[1] == 'Work from home':
                                     remote = 'yes'
                         elif key2 == 'job_highlights':
-                            qualif = item.get(key2)[0]
-                            #qualif = 'hello'
+                            qualifdict = item.get(key2)[0]
+                            if qualifdict.get('title') == 'Qualifications':
+                                qualiflist = qualifdict.get('items')
+                                qualif = "\n".join(qualiflist)
                     write_to_database(title, company, location, age, description, salary, remote, qualif, cursor)
 
         params["start"] += 10
@@ -110,6 +97,9 @@ def write_to_database(title, company, location, age, description, salary, remote
     cursor.execute(f'''INSERT INTO LISTINGS (title, company, location, salary, remote, age, description)
     VALUES(?, ?, ?, ?, ?, ?, ?)''',
                    (title, company, location, salary, remote, age, description))
+    cursor.execute(f'''INSERT INTO QUALIFICATIONS (title, company, qualifications)
+    VALUES(?, ?, ?)''',
+                   (title, company, qualif,))
 
 
 def main():
