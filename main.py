@@ -80,8 +80,6 @@ def format_data(cursor: sqlite3.Cursor):
                             description = item.get(key2)
                         elif key2 == 'detected_extensions':
                             extdict = item.get(key2)
-                            print(extdict)
-                            print(type(extdict))
                             if 'posted_at' in extdict.keys():
                                 age = extdict.get('posted_at')
                             if 'work_from_home' in extdict.keys():
@@ -99,10 +97,10 @@ def format_data(cursor: sqlite3.Cursor):
 
 
 def write_to_database(title, company, location, age, description, salary, remote, qualif, cursor: sqlite3.Cursor):
-    cursor.execute(f'''INSERT INTO LISTINGS (title, company, location, salary, remote, age, description)
+    cursor.execute('''INSERT INTO LISTINGS (title, company, location, salary, remote, age, description)
     VALUES(?, ?, ?, ?, ?, ?, ?)''',
                    (title, company, location, salary, remote, age, description))
-    cursor.execute(f'''INSERT INTO QUALIFICATIONS (title, company, qualifications)
+    cursor.execute('''INSERT INTO QUALIFICATIONS (title, company, qualifications)
     VALUES(?, ?, ?)''',
                    (title, company, qualif,))
 
