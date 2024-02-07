@@ -34,14 +34,14 @@ def setup_db(cursor: sqlite3.Cursor):
     location TEXT NOT NULL,
     salary TEXT NOT NULL DEFAULT 'Not Specified',
     remote TEXT NOT NULL DEFAULT 'Not Specified',
-    age TEXT NOT NULL,
+    age TEXT NOT NULL DEFAULT 'Not Specified',
     description TEXT NOT NULL
     );''')
     cursor.execute('''CREATE TABLE IF NOT EXISTS qualifications(
     job_no INTEGER PRIMARY KEY,
     title TEXT NOT NULL,
     company TEXT NOT NULL,
-    qualifications TEXT NOT NULL,
+    qualifications TEXT NOT NULL DEFAULT 'Not Specified',
     FOREIGN KEY (job_no) REFERENCES listings (job_no)
     ON DELETE CASCADE ON UPDATE NO ACTION,
     FOREIGN KEY (title, company) REFERENCES listings (title, company)
@@ -64,7 +64,7 @@ def format_data(cursor: sqlite3.Cursor):
                     title = 'na'
                     company = 'na'
                     location = 'na'
-                    age = 'na'
+                    age = 'Not Specified'
                     description = 'na'
                     salary = 'Not Specified'
                     remote = 'Not Specified'
@@ -78,11 +78,16 @@ def format_data(cursor: sqlite3.Cursor):
                             location = item.get(key2)
                         elif key2 == 'description':
                             description = item.get(key2)
-                        elif key2 == 'extensions':
-                            age = item.get(key2)[0]
-                            if len(item.get(key2)) >= 2:
-                                if item.get(key2)[1] == 'Work from home':
-                                    remote = 'yes'
+                        elif key2 == 'detected_extensions':
+                            extdict = item.get(key2)
+                            print(extdict)
+                            print(type(extdict))
+                            if 'posted_at' in extdict.keys():
+                                age = extdict.get('posted_at')
+                            if 'work_from_home' in extdict.keys():
+                                remote = 'Yes'
+                            if 'salary' in extdict.keys():
+                                salary = extdict.get('salary')
                         elif key2 == 'job_highlights':
                             qualifdict = item.get(key2)[0]
                             if qualifdict.get('title') == 'Qualifications':
