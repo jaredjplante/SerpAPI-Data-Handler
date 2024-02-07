@@ -55,45 +55,48 @@ def get_data():  # add comment to test workflow
     return results
 
 
-def format_data(cursor: sqlite3.Cursor):
+def get_job_results(cursor: sqlite3.Cursor):
     while params["start"] < 41:
         results = get_data()
         for key, value in results.items():
             if key == 'jobs_results':
                 for item in value:
-                    title = 'na'
-                    company = 'na'
-                    location = 'na'
-                    age = 'Not Specified'
-                    description = 'na'
-                    salary = 'Not Specified'
-                    remote = 'Not Specified'
-                    qualif = 'Not Specified'
-                    for key2 in item.keys():
-                        if key2 == 'title':
-                            title = item.get(key2)
-                        elif key2 == 'company_name':
-                            company = item.get(key2)
-                        elif key2 == 'location':
-                            location = item.get(key2)
-                        elif key2 == 'description':
-                            description = item.get(key2)
-                        elif key2 == 'detected_extensions':
-                            extdict = item.get(key2)
-                            if 'posted_at' in extdict.keys():
-                                age = extdict.get('posted_at')
-                            if 'work_from_home' in extdict.keys():
-                                remote = 'Yes'
-                            if 'salary' in extdict.keys():
-                                salary = extdict.get('salary')
-                        elif key2 == 'job_highlights':
-                            qualifdict = item.get(key2)[0]
-                            if qualifdict.get('title') == 'Qualifications':
-                                qualiflist = qualifdict.get('items')
-                                qualif = "\n".join(qualiflist)
-                    write_to_database(title, company, location, age, description, salary, remote, qualif, cursor)
-
+                    get_job_data(item, cursor)
         params["start"] += 10
+
+
+def get_job_data(item, cursor: sqlite3.Cursor):
+    title = 'na'
+    company = 'na'
+    location = 'na'
+    age = 'Not Specified'
+    description = 'na'
+    salary = 'Not Specified'
+    remote = 'Not Specified'
+    qualif = 'Not Specified'
+    for key2 in item.keys():
+        if key2 == 'title':
+            title = item.get(key2)
+        elif key2 == 'company_name':
+            company = item.get(key2)
+        elif key2 == 'location':
+            location = item.get(key2)
+        elif key2 == 'description':
+            description = item.get(key2)
+        elif key2 == 'detected_extensions':
+            extdict = item.get(key2)
+            if 'posted_at' in extdict.keys():
+                age = extdict.get('posted_at')
+            if 'work_from_home' in extdict.keys():
+                remote = 'Yes'
+            if 'salary' in extdict.keys():
+                salary = extdict.get('salary')
+        elif key2 == 'job_highlights':
+            qualifdict = item.get(key2)[0]
+            if qualifdict.get('title') == 'Qualifications':
+                qualiflist = qualifdict.get('items')
+                qualif = "\n".join(qualiflist)
+    write_to_database(title, company, location, age, description, salary, remote, qualif, cursor)
 
 
 def write_to_database(title, company, location, age, description, salary, remote, qualif, cursor: sqlite3.Cursor):
@@ -108,7 +111,7 @@ def write_to_database(title, company, location, age, description, salary, remote
 def main():
     conn, cursor = open_db("JobData.sqlite")
     setup_db(cursor)
-    format_data(cursor)
+    get_job_results(cursor)
     close_db(conn)
 
 
