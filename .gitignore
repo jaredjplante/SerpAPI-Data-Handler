@@ -1,3 +1,5 @@
 secrets.py
 git-init.sh
 git-push.sh
+.pytest_cache
+tests/.pytest_cache
