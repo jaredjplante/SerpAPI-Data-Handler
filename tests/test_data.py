@@ -2,8 +2,13 @@ import main
 
 
 def test_web_data():
-    job_count = main.testable_get_job_results()
-    assert job_count >= 50
+    job_data = main.get_data()
+    num_jobs = 0
+    for query in job_data:
+        for key, value in query.items():
+            if key == 'jobs_results':
+                num_jobs += len(value)
+    assert num_jobs >= 50
 
 
 def test_database():
