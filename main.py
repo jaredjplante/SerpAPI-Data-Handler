@@ -65,6 +65,20 @@ def get_job_results(cursor: sqlite3.Cursor):
         params["start"] += 10
 
 
+def testable_get_job_results():
+    job_count = 0
+    while params["start"] < 41:
+        results = get_data()
+        for key, value in results.items():
+            if key == 'jobs_results':
+                for item in value:
+                    # changed to not write to database
+                    job_count += 1
+        params["start"] += 10
+    # changed to give tangible output
+    return job_count
+
+
 def get_job_data(item, cursor: sqlite3.Cursor):
     title = item.get('title', 'na')
     company = item.get('company_name', 'na')
