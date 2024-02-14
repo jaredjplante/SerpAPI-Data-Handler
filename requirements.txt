@@ -1,3 +1,0 @@
-serpapi
-google-search-results
-pytest
