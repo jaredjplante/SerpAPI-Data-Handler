@@ -23,6 +23,11 @@ jobs:
       uses: actions/setup-python@v3
       with:
         python-version: "3.10"
+    - name: Build Secrets
+      env:
+        API_KEY: ${{ secrets.SERPAPI_KEY }}
+      run: |
+        echo 'secretkey = "'$API_KEY'"' >> secrets.py
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
@@ -38,4 +43,4 @@ jobs:
     - name: Test with pytest
       run: |
         pip install pytest
-        # pytest
+        python -m pytest tests
