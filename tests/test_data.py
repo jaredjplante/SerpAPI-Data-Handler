@@ -15,7 +15,7 @@ def test_web_data():
 def test_database():
     conn, cursor = databaseutils.open_db("test.sqlite")
     databaseutils.setup_db(cursor)
-    databaseutils.write_to_database("Test Title",
+    databaseutils.write_to_tables("Test Title",
                                     "Test Company",
                                     "Test Location",
                                     "50000 days ago",
@@ -23,7 +23,7 @@ def test_database():
                                     "5 dollars",
                                     "Yes",
                                     "Must have 10 years of experience",
-                                    cursor)
+                                  cursor)
     cursor.execute("SELECT company, location, age, salary FROM listings WHERE title = 'Test Title'")
     record = cursor.fetchone()
     assert record[0] == "Test Company"

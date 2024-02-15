@@ -51,4 +51,4 @@ def get_job_data(item, cursor: sqlite3.Cursor):
     if qualifdict.get('title') == 'Qualifications':
         qualiflist = qualifdict.get('items')
         qualif = "\n".join(qualiflist)
-    databaseutils.write_to_database(title, company, location, age, description, salary, remote, qualif, cursor)
+    databaseutils.write_to_tables(title, company, location, age, description, salary, remote, qualif, cursor)

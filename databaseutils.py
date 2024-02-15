@@ -34,12 +34,30 @@ def setup_db(cursor: sqlite3.Cursor):
     FOREIGN KEY (title, company) REFERENCES listings (title, company)
     ON DELETE CASCADE ON UPDATE NO ACTION
     );''')
+    cursor.execute('''CREATE TABLE IF NOT EXISTS listings_excel(
+    job_id TEXT PRIMARY KEY,
+    job_title TEXT NOT NULL,
+    company_name TEXT NOT NULL,
+    location TEXT NOT NULL,
+    min_salary INT NOT NULL,
+    max_salary INT NOT NULL,
+    salary_time TEXT NOT NULL,
+    posted_at TEXT NOT NULL
+    );''')
 
 
-def write_to_database(title, company, location, age, description, salary, remote, qualif, cursor: sqlite3.Cursor):
+def write_to_tables(title, company, location, age, description, salary, remote, qualif, cursor: sqlite3.Cursor):
     cursor.execute('''INSERT INTO LISTINGS (title, company, location, salary, remote, age, description)
     VALUES(?, ?, ?, ?, ?, ?, ?)''',
                    (title, company, location, salary, remote, age, description))
     cursor.execute('''INSERT INTO QUALIFICATIONS (title, company, qualifications)
     VALUES(?, ?, ?)''',
                    (title, company, qualif,))
+
+
+def write_to_excel_table(jop_id, job_title, company_name, location, min_salary, max_salary, salary_time, posted_at,
+                         cursor: sqlite3.Cursor):
+    cursor.execute('''INSERT INTO LISTINGS_EXCEL (jop_id, job_title, company_name, location, min_salary, max_salary,
+                    salary_time, posted_at)
+    VALUES(?, ?, ?, ?, ?, ?, ?, ?)''',
+                   (jop_id, job_title, company_name, location, min_salary, max_salary, salary_time, posted_at))
