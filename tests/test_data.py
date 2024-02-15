@@ -1,7 +1,5 @@
-import main
 import databaseutils
 import datautils
-import excelutils
 
 
 def test_web_data():
