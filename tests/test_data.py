@@ -16,13 +16,13 @@ def test_database():
     conn, cursor = databaseutils.open_db("test.sqlite")
     databaseutils.setup_db(cursor)
     databaseutils.write_to_tables("Test Title",
-                                    "Test Company",
-                                    "Test Location",
-                                    "50000 days ago",
-                                    "This is a test description!",
-                                    "5 dollars",
-                                    "Yes",
-                                    "Must have 10 years of experience",
+                                  "Test Company",
+                                  "Test Location",
+                                  "50000 days ago",
+                                  "This is a test description!",
+                                  "5 dollars",
+                                  "Yes",
+                                  "Must have 10 years of experience",
                                   cursor)
     cursor.execute("SELECT company, location, age, salary FROM listings WHERE title = 'Test Title'")
     record = cursor.fetchone()
