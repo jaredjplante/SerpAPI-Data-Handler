@@ -8,7 +8,10 @@ serpapi:\
     &nbsp;&nbsp;&nbsp;&nbsp;pip install serpapi\
 secrets.py:\
     &nbsp;&nbsp;&nbsp;&nbsp;create a secrets.py file in the project's directory and add this line with your api key:\
-    &nbsp;&nbsp;&nbsp;&nbsp;secretkey = "enter key here"
+    &nbsp;&nbsp;&nbsp;&nbsp;secretkey = "enter key here"\
+openpyxl:\
+    &nbsp;&nbsp;&nbsp;&nbsp;pip install openpyxl
+****
 
 Description:\
 This project uses serpapi to grab data from a Google job search for software developer jobs. The data is scraped from the first five pages of results from the Google search.
