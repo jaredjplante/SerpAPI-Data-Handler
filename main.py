@@ -5,9 +5,9 @@ import excelutils
 def main():
     conn, cursor = databaseutils.open_db("JobData.sqlite")
     databaseutils.setup_db(cursor)
-    databaseutils.close_db(conn)
     data = excelutils.get_excel_data("Sprint3Data.xlsx")
-    print(data)
+    excelutils.write_excel_table(data, cursor)
+    databaseutils.close_db(conn)
 
 
 if __name__ == "__main__":

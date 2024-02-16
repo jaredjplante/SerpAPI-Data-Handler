@@ -1,4 +1,7 @@
+import sqlite3
+
 import openpyxl
+import databaseutils
 
 
 def get_excel_data(filename):
@@ -25,4 +28,13 @@ def get_excel_data(filename):
             'job_title': job_title
         }
         total_data.append(row_dict)
+    # remove headers
+    total_data.pop(0)
     return total_data
+
+
+def write_excel_table(data: list[dict], cursor: sqlite3.Cursor):
+    for row_dict in data:
+        databaseutils.write_to_excel_table(row_dict['job_id'], row_dict['job_title'], row_dict['company_name'],
+                                           row_dict['location'], row_dict['min_salary'], row_dict['max_salary'],
+                                           row_dict['salary_time'], row_dict['posting_age'], cursor)
