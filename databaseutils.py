@@ -55,9 +55,9 @@ def write_to_tables(title, company, location, age, description, salary, remote, 
                    (title, company, qualif,))
 
 
-def write_to_excel_table(jop_id, job_title, company_name, location, min_salary, max_salary, salary_time, posted_at,
+def write_to_excel_table(job_id, job_title, company_name, location, min_salary, max_salary, salary_time, posted_at,
                          cursor: sqlite3.Cursor):
-    cursor.execute('''INSERT INTO LISTINGS_EXCEL (jop_id, job_title, company_name, location, min_salary, max_salary,
+    cursor.execute('''INSERT INTO LISTINGS_EXCEL (job_id, job_title, company_name, location, min_salary, max_salary,
                     salary_time, posted_at)
     VALUES(?, ?, ?, ?, ?, ?, ?, ?)''',
-                   (jop_id, job_title, company_name, location, min_salary, max_salary, salary_time, posted_at))
+                   (job_id, job_title, company_name, location, min_salary, max_salary, salary_time, posted_at))
