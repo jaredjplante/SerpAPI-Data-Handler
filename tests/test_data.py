@@ -1,5 +1,3 @@
-import pytest
-
 import databaseutils
 import datautils
 import excelutils
