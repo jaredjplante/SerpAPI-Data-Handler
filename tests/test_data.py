@@ -1,5 +1,8 @@
+import pytest
+
 import databaseutils
 import datautils
+import excelutils
 
 
 def test_web_data():
@@ -31,3 +34,17 @@ def test_database():
     assert record[2] == "50000 days ago"
     assert record[3] == "5 dollars"
     databaseutils.close_db(conn)
+
+
+def test_excel_columns():
+    data = excelutils.get_excel_data("Sprint3Data.xlsx")
+    for row in data:
+        columns = [row['job_id'], row['job_title'], row['company_name'],
+                   row['location'], row['min_salary'], row['max_salary'],
+                   row['salary_time'], row['posting_age']]
+        assert len(columns) == 8
+
+
+def test_excel_rows():
+    data = excelutils.get_excel_data("Sprint3Data.xlsx")
+    assert len(data) >= 300
