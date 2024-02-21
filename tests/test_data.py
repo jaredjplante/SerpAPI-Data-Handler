@@ -46,3 +46,28 @@ def test_excel_columns():
 def test_excel_rows():
     data = excelutils.get_excel_data("Sprint3Data.xlsx")
     assert len(data) >= 300
+
+
+def test_check_excel_table():
+    # test to see if excel data matches table
+    # assumes data was already written to table
+    conn, cursor = databaseutils.open_db("JobData.sqlite")
+    databaseutils.setup_db(cursor)
+    data = excelutils.get_excel_data("Sprint3Data.xlsx")
+    cursor.execute("SELECT company_name, posted_at, job_title FROM listings_excel WHERE job_id = '2907e6de3fa805a1'")
+    record = cursor.fetchone()
+    assert data[0]['company_name'] == record[0]
+    assert data[0]['posting_age'] == record[1]
+    assert data[0]['job_title'] == record[2]
+    cursor.execute("SELECT company_name, posted_at, job_title FROM listings_excel WHERE job_id = '1c693745ac26dbba'")
+    record = cursor.fetchone()
+    assert data[1]['company_name'] == record[0]
+    assert data[1]['posting_age'] == record[1]
+    assert data[1]['job_title'] == record[2]
+    cursor.execute("SELECT company_name, posted_at, job_title FROM listings_excel WHERE job_id = 'ed15838c7b0e695f'")
+    record = cursor.fetchone()
+    assert data[2]['company_name'] == record[0]
+    assert data[2]['posting_age'] == record[1]
+    assert data[2]['job_title'] == record[2]
+
+    databaseutils.close_db(conn)
