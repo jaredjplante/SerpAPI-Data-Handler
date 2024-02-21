@@ -13,7 +13,7 @@ def test_web_data():
     assert num_jobs >= 50
 
 
-def test_database():
+def test_write_database():
     conn, cursor = databaseutils.open_db("test.sqlite")
     databaseutils.setup_db(cursor)
     databaseutils.write_to_tables("Test Title",
@@ -25,12 +25,30 @@ def test_database():
                                   "Yes",
                                   "Must have 10 years of experience",
                                   cursor)
+    databaseutils.write_to_excel_table("500",
+                                       "Test Title Excel",
+                                       "Test Company Excel",
+                                       "Test Location Excel",
+                                       "Min Salary Excel",
+                                       "Max Salary Excel",
+                                       "Salary Time Excel",
+                                       "5 minutes ago",
+                                       cursor)
     cursor.execute("SELECT company, location, age, salary FROM listings WHERE title = 'Test Title'")
     record = cursor.fetchone()
     assert record[0] == "Test Company"
     assert record[1] == "Test Location"
     assert record[2] == "50000 days ago"
     assert record[3] == "5 dollars"
+    cursor.execute("SELECT company_name, location, posted_at, min_salary, max_salary FROM listings_excel WHERE "
+                   "job_title"
+                   "= 'Test Title Excel'")
+    record = cursor.fetchone()
+    assert record[0] == "Test Company Excel"
+    assert record[1] == "Test Location Excel"
+    assert record[2] == "5 minutes ago"
+    assert record[3] == "Min Salary Excel"
+    assert record[4] == "Max Salary Excel"
     databaseutils.close_db(conn)
 
 
