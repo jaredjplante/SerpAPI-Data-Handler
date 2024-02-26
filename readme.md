@@ -1,4 +1,4 @@
-Jared Plante Project 1: Sprint 1
+Jared Plante Project 1
 
 Requires:\
 Python 3.9-3.10\
