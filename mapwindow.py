@@ -31,7 +31,7 @@ class mapwindow(QWidget):
         geolocator = Nominatim(user_agent="Comp490MapDemo2024")
         Bos_location = geolocator.geocode(address)
         temp_demo_map = folium.Map(
-            location=[Bos_location.latitude, Bos_location.longitude], zoom_start=50
+            location=[Bos_location.latitude, Bos_location.longitude], zoom_start=2
         )
         in_memory_file = io.BytesIO()
         # modified from folium docs
