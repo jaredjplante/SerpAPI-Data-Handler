@@ -17,6 +17,8 @@ class MainWindow(QWidget):
         self.salary = "Not Specified"
         self.mins = "Not Specified"
         self.maxs = "Not Specified"
+        self.salarytime = "Not Specified"
+        self.qualifications = "Not Specified"
         self.data = data_to_show
         self.setup_window()
 
@@ -48,17 +50,21 @@ class MainWindow(QWidget):
         results = cursor.fetchone()
         if results:
             self.location, self.age, self.remote, self.salary = results
+            cursor.execute("SELECT qualifications FROM qualifications WHERE title = ? AND company = ?",
+                           (title, company))
+            self.qualifications = cursor.fetchone()
             self.job_info.setText(
-                f"Location: {self.location}, Age: {self.age}, Remote: {self.remote}, Salary: {self.salary}")
+                f"Location: {self.location}, Age: {self.age}, Remote: {self.remote}, Salary: {self.salary} \n Qualifications: {self.qualifications}")
         else:
             cursor.execute(
-                "SELECT location, posted_at, min_salary, max_salary FROM listings_excel WHERE job_title = ? AND "
+                "SELECT location, posted_at, min_salary, max_salary, salary_time FROM listings_excel WHERE job_title = ? AND "
                 "company_name = ?",
                 (title, company))
             results = cursor.fetchone()
-            self.location, self.age, self.mins, self.maxs = results
+            self.location, self.age, self.mins, self.maxs, self.salarytime = results
             self.job_info.setText(
-                f"Location: {self.location}, Age: {self.age}, Remote: Not Specified, Salary: {self.mins} to {self.maxs}")
+                f"Location: {self.location}, Age: {self.age}, Remote: Not Specified, Salary: {self.mins} to {self.maxs} {self.salarytime}")
+        databaseutils.close_db(conn)
 
 
 def get_job_titles():
