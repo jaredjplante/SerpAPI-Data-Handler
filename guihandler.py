@@ -6,7 +6,9 @@ from PySide6.QtWidgets import QApplication, QListWidget, QListWidgetItem, QWidge
 import mapwindow
 import databaseutils
 
-
+class job():
+    def __init__(self, data_to_show):
+        super().__init__()
 class MainWindow(QWidget):
     def __init__(self, data_to_show):
         super().__init__()
@@ -56,7 +58,7 @@ class MainWindow(QWidget):
 
         self.filter_button = QPushButton("Apply", self)
         self.filter_button.setGeometry(775, 50, 50, 30)
-        self.filter_button.clicked.connect(self.apply_keyword)
+        self.filter_button.clicked.connect(self.apply_location)
 
         self.remote_filter = QLineEdit(self)
         self.remote_filter.setPlaceholderText("Remote: Enter y")
@@ -86,10 +88,41 @@ class MainWindow(QWidget):
             item = self.list_control.item(index)
             item.setHidden(keyword.lower() not in item.text().lower())
 
+
+    # def apply_location(self):
+    #     self.list_control.clear()
+    #     location = self.location_filter.text()
+    #     temp_list = get_job_titles()
+    #     for item1, item2, item3, in temp_list:
+    #         if location.lower() in item3.lower():
+    #             list_item = QListWidgetItem(f"{item1} ||| {item2}", listview=self.list_control)
+
+
+    def apply_location(self):
+        jobs_to_keep = []
+        location = self.location_filter.text()
+        for index in range(self.list_control.count()):
+            if not self.list_control.item(index).isHidden():
+                item = self.list_control.item(index).text()
+                data_values = item.split(" ||| ")
+                self.get_job_info(data_values[0], data_values[1])
+                self.job_info.clear()
+                if location.lower() in self.location.lower():
+                    #list_item = QListWidgetItem(f"{data_values[0]} ||| {data_values[1]}", listview=self.list_control)
+                    jobs_to_keep.append(f"{data_values[0]} ||| {data_values[1]}")
+        self.list_control.clear()
+        for item in jobs_to_keep:
+            list_item = QListWidgetItem(item, listview=self.list_control)
+
+
+
     def write_job_info(self, selection):
-        selected_data = selection.data(0)
-        data_values = selected_data.split(" ||| ")
-        self.get_job_info(data_values[0], data_values[1])
+        try:
+            selected_data = selection.data(0)
+            data_values = selected_data.split(" ||| ")
+            self.get_job_info(data_values[0], data_values[1])
+        except AttributeError as e:
+            pass
 
     def get_job_info(self, title, company):
         conn, cursor = databaseutils.open_db("JobData.sqlite")
