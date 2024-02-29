@@ -45,7 +45,7 @@ class MainWindow(QWidget):
         #self.mapwindow = mapwindow.mapwindow(self.maplist)
         # filters
         self.keyword_input = QLineEdit(self)
-        self.keyword_input.setPlaceholderText("Enter keyword")
+        self.keyword_input.setPlaceholderText("Enter keyword here")
         self.keyword_input.setGeometry(600, 10, 180, 30)
 
         self.filter_button = QPushButton("Apply", self)
@@ -53,7 +53,7 @@ class MainWindow(QWidget):
         self.filter_button.clicked.connect(self.apply_keyword)
 
         self.location_filter = QLineEdit(self)
-        self.location_filter.setPlaceholderText("Enter location")
+        self.location_filter.setPlaceholderText("Enter location here")
         self.location_filter.setGeometry(600, 50, 180, 30)
 
         self.filter_button = QPushButton("Apply", self)
@@ -61,12 +61,12 @@ class MainWindow(QWidget):
         self.filter_button.clicked.connect(self.apply_location)
 
         self.remote_filter = QLineEdit(self)
-        self.remote_filter.setPlaceholderText("Remote: Enter y")
+        self.remote_filter.setPlaceholderText("Remote Search")
         self.remote_filter.setGeometry(600, 90, 180, 30)
 
         self.filter_button = QPushButton("Apply", self)
         self.filter_button.setGeometry(775, 90, 50, 30)
-        self.filter_button.clicked.connect(self.apply_keyword)
+        self.filter_button.clicked.connect(self.apply_remote)
 
         self.salary_input = QLineEdit(self)
         self.salary_input.setPlaceholderText("Minimum salary: Enter int")
@@ -108,7 +108,21 @@ class MainWindow(QWidget):
                 self.get_job_info(data_values[0], data_values[1])
                 self.job_info.clear()
                 if location.lower() in self.location.lower():
-                    #list_item = QListWidgetItem(f"{data_values[0]} ||| {data_values[1]}", listview=self.list_control)
+                    jobs_to_keep.append(f"{data_values[0]} ||| {data_values[1]}")
+        self.list_control.clear()
+        for item in jobs_to_keep:
+            list_item = QListWidgetItem(item, listview=self.list_control)
+
+
+    def apply_remote(self):
+        jobs_to_keep = []
+        for index in range(self.list_control.count()):
+            if not self.list_control.item(index).isHidden():
+                item = self.list_control.item(index).text()
+                data_values = item.split(" ||| ")
+                self.get_job_info(data_values[0], data_values[1])
+                self.job_info.clear()
+                if self.remote == "Yes":
                     jobs_to_keep.append(f"{data_values[0]} ||| {data_values[1]}")
         self.list_control.clear()
         for item in jobs_to_keep:
