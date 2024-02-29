@@ -3,3 +3,5 @@ google-search-results
 pytest
 openpyxl
 pyside6
+folium
+geopy

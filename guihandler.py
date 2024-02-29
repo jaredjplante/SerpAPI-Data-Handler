@@ -3,6 +3,7 @@ import sys
 from PySide6.QtQuick import QQuickWindow, QSGRendererInterface
 from PySide6.QtWidgets import QApplication, QListWidget, QListWidgetItem, QWidget, QTextEdit
 
+import mapwindow
 import databaseutils
 
 
@@ -19,6 +20,7 @@ class MainWindow(QWidget):
         self.maxs = "Not Specified"
         self.salarytime = "Not Specified"
         self.qualifications = "Not Specified"
+        self.maplist = []
         self.data = data_to_show
         self.setup_window()
 
@@ -27,15 +29,20 @@ class MainWindow(QWidget):
         # job list
         list = QListWidget(self)
         self.list_control = list
-        for item1, item2 in self.data:
+        for item1, item2, item3 in self.data:
             list_item = QListWidgetItem(f"{item1} ||| {item2}", listview=self.list_control)
+            self.maplist.append(item3)
         self.list_control.currentItemChanged.connect(self.write_job_info)
         list.resize(600, 500)
         # info text box
         self.job_info = QTextEdit()
         self.job_info.setReadOnly(True)
         self.job_info.setGeometry(1250, 275, 500, 500)
+        # map creation
+        self.mapwindow = mapwindow.mapwindow(self.maplist)
+        # show
         self.show()
+        self.mapwindow.show()
         self.job_info.show()
 
     def write_job_info(self, selection):
@@ -69,9 +76,9 @@ class MainWindow(QWidget):
 
 def get_job_titles():
     conn, cursor = databaseutils.open_db("JobData.sqlite")
-    cursor.execute("SELECT title, company FROM listings")
+    cursor.execute("SELECT title, company, location FROM listings")
     title_data = cursor.fetchall()
-    cursor.execute("SELECT job_title, company_name FROM listings_excel")
+    cursor.execute("SELECT job_title, company_name, location FROM listings_excel")
     title_data_excel = cursor.fetchall()
     databaseutils.close_db(conn)
     return title_data + title_data_excel

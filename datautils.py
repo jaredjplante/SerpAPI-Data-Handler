@@ -1,6 +1,6 @@
 from serpapi import GoogleSearch
 import databaseutils
-import secrets
+import secrets2
 import sqlite3
 
 params = {
