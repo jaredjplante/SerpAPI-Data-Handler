@@ -26,7 +26,7 @@ class MainWindow(QWidget):
 
     def setup_window(self):
         self.setWindowTitle("Software Developer Job Listings")
-        self.setGeometry(250,275,800,500)
+        self.setGeometry(250,275,850,500)
         # job list
         list = QListWidget(self)
         self.list_control = list
@@ -46,30 +46,46 @@ class MainWindow(QWidget):
         self.keyword_input.setPlaceholderText("Enter keyword")
         self.keyword_input.setGeometry(600, 10, 180, 30)
 
+        self.filter_button = QPushButton("Apply", self)
+        self.filter_button.setGeometry(775, 10, 50, 30)
+        self.filter_button.clicked.connect(self.apply_keyword)
+
         self.location_filter = QLineEdit(self)
         self.location_filter.setPlaceholderText("Enter location")
         self.location_filter.setGeometry(600, 50, 180, 30)
+
+        self.filter_button = QPushButton("Apply", self)
+        self.filter_button.setGeometry(775, 50, 50, 30)
+        self.filter_button.clicked.connect(self.apply_keyword)
 
         self.remote_filter = QLineEdit(self)
         self.remote_filter.setPlaceholderText("Remote: Enter y")
         self.remote_filter.setGeometry(600, 90, 180, 30)
 
+        self.filter_button = QPushButton("Apply", self)
+        self.filter_button.setGeometry(775, 90, 50, 30)
+        self.filter_button.clicked.connect(self.apply_keyword)
+
         self.salary_input = QLineEdit(self)
         self.salary_input.setPlaceholderText("Minimum salary: Enter int")
         self.salary_input.setGeometry(600, 130, 180, 30)
 
-        self.filter_button = QPushButton("Apply Filters", self)
-        self.filter_button.setGeometry(600, 170, 180, 30)
-        self.filter_button.clicked.connect(self.apply_filters)
-
+        self.filter_button = QPushButton("Apply", self)
+        self.filter_button.setGeometry(775, 130, 50, 30)
+        self.filter_button.clicked.connect(self.apply_keyword)
 
         # show
         self.show()
         #self.mapwindow.show()
         self.job_info.show()
 
-    def apply_filters(self):
-        print('hi')
+
+    def apply_keyword(self):
+        keyword = self.keyword_input.text()
+        for index in range(self.list_control.count()):
+            item = self.list_control.item(index)
+            item.setHidden(keyword.lower() not in item.text().lower())
+
     def write_job_info(self, selection):
         selected_data = selection.data(0)
         data_values = selected_data.split(" ||| ")
