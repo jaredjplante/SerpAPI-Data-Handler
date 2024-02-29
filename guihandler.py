@@ -1,7 +1,7 @@
 import sys
 
 from PySide6.QtQuick import QQuickWindow, QSGRendererInterface
-from PySide6.QtWidgets import QApplication, QListWidget, QListWidgetItem, QWidget, QTextEdit
+from PySide6.QtWidgets import QApplication, QListWidget, QListWidgetItem, QWidget, QTextEdit, QLineEdit, QPushButton
 
 import mapwindow
 import databaseutils
@@ -26,6 +26,7 @@ class MainWindow(QWidget):
 
     def setup_window(self):
         self.setWindowTitle("Software Developer Job Listings")
+        self.setGeometry(250,275,800,500)
         # job list
         list = QListWidget(self)
         self.list_control = list
@@ -39,12 +40,36 @@ class MainWindow(QWidget):
         self.job_info.setReadOnly(True)
         self.job_info.setGeometry(1250, 275, 500, 500)
         # map creation
-        self.mapwindow = mapwindow.mapwindow(self.maplist)
+        #self.mapwindow = mapwindow.mapwindow(self.maplist)
+        # filters
+        self.keyword_input = QLineEdit(self)
+        self.keyword_input.setPlaceholderText("Enter keyword")
+        self.keyword_input.setGeometry(600, 10, 180, 30)
+
+        self.location_filter = QLineEdit(self)
+        self.location_filter.setPlaceholderText("Enter location")
+        self.location_filter.setGeometry(600, 50, 180, 30)
+
+        self.remote_filter = QLineEdit(self)
+        self.remote_filter.setPlaceholderText("Remote: Enter y")
+        self.remote_filter.setGeometry(600, 90, 180, 30)
+
+        self.salary_input = QLineEdit(self)
+        self.salary_input.setPlaceholderText("Minimum salary: Enter int")
+        self.salary_input.setGeometry(600, 130, 180, 30)
+
+        self.filter_button = QPushButton("Apply Filters", self)
+        self.filter_button.setGeometry(600, 170, 180, 30)
+        self.filter_button.clicked.connect(self.apply_filters)
+
+
         # show
         self.show()
-        self.mapwindow.show()
+        #self.mapwindow.show()
         self.job_info.show()
 
+    def apply_filters(self):
+        print('hi')
     def write_job_info(self, selection):
         selected_data = selection.data(0)
         data_values = selected_data.split(" ||| ")
