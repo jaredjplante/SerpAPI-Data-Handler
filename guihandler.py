@@ -74,7 +74,7 @@ class MainWindow(QWidget):
 
         self.filter_button = QPushButton("Apply", self)
         self.filter_button.setGeometry(775, 130, 50, 30)
-        self.filter_button.clicked.connect(self.apply_keyword)
+        self.filter_button.clicked.connect(self.apply_salary)
 
         # show
         self.show()
@@ -88,14 +88,6 @@ class MainWindow(QWidget):
             item = self.list_control.item(index)
             item.setHidden(keyword.lower() not in item.text().lower())
 
-
-    # def apply_location(self):
-    #     self.list_control.clear()
-    #     location = self.location_filter.text()
-    #     temp_list = get_job_titles()
-    #     for item1, item2, item3, in temp_list:
-    #         if location.lower() in item3.lower():
-    #             list_item = QListWidgetItem(f"{item1} ||| {item2}", listview=self.list_control)
 
 
     def apply_location(self):
@@ -123,6 +115,36 @@ class MainWindow(QWidget):
                 self.get_job_info(data_values[0], data_values[1])
                 self.job_info.clear()
                 if self.remote == "Yes":
+                    jobs_to_keep.append(f"{data_values[0]} ||| {data_values[1]}")
+        self.list_control.clear()
+        for item in jobs_to_keep:
+            list_item = QListWidgetItem(item, listview=self.list_control)
+
+
+    def apply_salary(self):
+        jobs_to_keep = []
+        int_compare_salary = 999999999
+        salary = self.salary_input.text()
+        try:
+            int_salary = int(salary)
+        except ValueError as e:
+            self.job_info.clear()
+            self.job_info.setText("Enter an int!")
+            return
+        for index in range(self.list_control.count()):
+            if not self.list_control.item(index).isHidden():
+                item = self.list_control.item(index).text()
+                data_values = item.split(" ||| ")
+                self.get_job_info(data_values[0], data_values[1])
+                self.job_info.clear()
+                try:
+                    int_compare_salary = int(self.salary)
+                except ValueError as e:
+                    try:
+                        int_compare_salary = int(self.mins)
+                    except ValueError as e:
+                        continue
+                if int_compare_salary > int_salary:
                     jobs_to_keep.append(f"{data_values[0]} ||| {data_values[1]}")
         self.list_control.clear()
         for item in jobs_to_keep:
