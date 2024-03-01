@@ -109,7 +109,6 @@ def test_check_old_tables():
 
 def create_gui():
     QQuickWindow.setGraphicsApi(QSGRendererInterface.GraphicsApi.Software)
-    qt_app = QApplication(sys.argv)
     data = [["Software Engineer, Full Stack", "Capital One", "us, New York, NY 10012"],
             ["Entry Level Java Developer", "SummitWorks Technologies Inc", "us, Boston, MA"],
             ["Lead Software Engineer", "Free From Market", "us, Kansas City, MO"],  # $$$
@@ -121,8 +120,24 @@ def create_gui():
     # clicking the remote button will filter for remote jobs
     return window
 
-
+def create_instance():
+    if not QApplication.instance():
+        qt_app = QApplication(sys.argv)
+    else:
+        qt_app = QApplication.instance()
+    return qt_app
 def test_keyword():
+    qt_app = create_instance()
     job = guihandler.MainWindow.apply_keyword(create_gui())
     assert len(job) == 1
     assert job[0] == 'Entry Level Java Developer ||| SummitWorks Technologies Inc'
+    qt_app.quit()
+
+
+
+def test_location():
+    qt_app = create_instance()
+    job = guihandler.MainWindow.apply_location(create_gui())
+    assert len(job) == 1
+    assert job[0] == 'Software Engineer, Full Stack ||| Capital One'
+    qt_app.quit()
