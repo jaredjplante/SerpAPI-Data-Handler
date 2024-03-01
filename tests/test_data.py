@@ -126,6 +126,9 @@ def create_instance():
     else:
         qt_app = QApplication.instance()
     return qt_app
+
+def test_get_job_titles():
+    assert len(guihandler.get_job_titles()) > 700
 def test_keyword():
     qt_app = create_instance()
     job = guihandler.MainWindow.apply_keyword(create_gui())
