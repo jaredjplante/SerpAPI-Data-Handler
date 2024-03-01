@@ -133,7 +133,6 @@ class MainWindow(QWidget):
 
     def apply_salary(self):
         jobs_to_keep = []
-        int_compare_salary = 999999999
         salary = self.salary_input.text()
         try:
             int_salary = int(salary)
@@ -189,6 +188,10 @@ class MainWindow(QWidget):
         results = cursor.fetchone()
         if results:
             self.location, self.age, self.remote, self.salary = results
+            # keep unavailable info not specified
+            self.mins = "Not Specified"
+            self.maxs = "Not Specified"
+            self.salarytime = "Not Specified"
             cursor.execute("SELECT qualifications FROM qualifications WHERE title = ? AND company = ?",
                            (title, company))
             self.qualifications = cursor.fetchone()
@@ -201,6 +204,9 @@ class MainWindow(QWidget):
                 (title, company))
             results = cursor.fetchone()
             self.location, self.age, self.mins, self.maxs, self.salarytime = results
+            # keep unavailable info not specified
+            self.salary = "Not Specified"
+            self.remote = "Not Specified"
             self.job_info.setText(
                 f"Location: {self.location}, Age: {self.age}, Remote: Not Specified, Salary: {self.mins} to {self.maxs} {self.salarytime}")
         databaseutils.close_db(conn)

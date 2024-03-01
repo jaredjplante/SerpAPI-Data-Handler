@@ -141,3 +141,11 @@ def test_location():
     assert len(job) == 1
     assert job[0] == 'Software Engineer, Full Stack ||| Capital One'
     qt_app.quit()
+
+
+def test_salary():
+    qt_app = create_instance()
+    job = guihandler.MainWindow.apply_salary(create_gui())
+    assert len(job) == 1
+    assert job[0] == 'Lead Software Engineer ||| Free From Market'
+    qt_app.quit()
