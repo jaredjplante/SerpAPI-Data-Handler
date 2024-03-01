@@ -149,3 +149,11 @@ def test_salary():
     assert len(job) == 1
     assert job[0] == 'Lead Software Engineer ||| Free From Market'
     qt_app.quit()
+
+
+def test_remote():
+    qt_app = create_instance()
+    job = guihandler.MainWindow.apply_remote(create_gui())
+    assert len(job) == 1
+    assert job[0] == 'Software Developer ||| Atlas'
+    qt_app.quit()
