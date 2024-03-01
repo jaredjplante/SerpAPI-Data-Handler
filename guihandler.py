@@ -42,7 +42,7 @@ class MainWindow(QWidget):
         self.job_info.setReadOnly(True)
         self.job_info.setGeometry(1250, 275, 500, 500)
         # map creation
-        #self.mapwindow = mapwindow.mapwindow(self.maplist)
+        self.mapwindow = mapwindow.mapwindow(self.maplist)
         # filters
         self.keyword_input = QLineEdit(self)
         self.keyword_input.setPlaceholderText("Enter keyword here")
@@ -78,7 +78,7 @@ class MainWindow(QWidget):
 
         # show
         self.show()
-        #self.mapwindow.show()
+        self.mapwindow.show()
         self.job_info.show()
 
 
@@ -87,6 +87,7 @@ class MainWindow(QWidget):
         for index in range(self.list_control.count()):
             item = self.list_control.item(index)
             item.setHidden(keyword.lower() not in item.text().lower())
+            #add map changes
 
 
 

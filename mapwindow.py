@@ -5,7 +5,7 @@ from PySide6.QtWebEngineWidgets import QWebEngineView
 from geopy.geocoders import Nominatim
 from geopy.exc import GeocoderTimedOut
 from folium.plugins import MarkerCluster
-
+from functools import lru_cache
 
 
 class mapwindow(QWidget):
@@ -25,10 +25,17 @@ class mapwindow(QWidget):
         self.resize(800, 800)
         self.show()
 
+    @lru_cache(maxsize=750)
+    def geocode_location(self, location):
+        geolocator = Nominatim(user_agent="MapSprint4")
+        try:
+            return geolocator.geocode(location, timeout=15)
+        except GeocoderTimedOut as e:
+            print("Error: geocode failed on input %s" % (location))
 
     def build_map(self):
         address = 'Brockton, MA'
-        geolocator = Nominatim(user_agent="Comp490MapDemo2024")
+        geolocator = Nominatim(user_agent="MapSprint4")
         Bos_location = geolocator.geocode(address)
         temp_demo_map = folium.Map(
             location=[Bos_location.latitude, Bos_location.longitude], zoom_start=2
@@ -38,13 +45,10 @@ class mapwindow(QWidget):
         # https://python-visualization.github.io/folium/latest/user_guide/plugins/marker_cluster.html
         map_data_markers = MarkerCluster().add_to(temp_demo_map)
         for location in self.data_to_display:
-            try:
-                job_loc_geocoded = geolocator.geocode(location, timeout=10)  # this might need try/catch for small towns
-                if job_loc_geocoded is not None:
-                    folium.Marker(
-                        location=[job_loc_geocoded.latitude, job_loc_geocoded.longitude],
-                    ).add_to(map_data_markers)
-            except GeocoderTimedOut as e:
-                print("Error: geocode failed on input %s" % (location))
+            job_loc_geocoded = self.geocode_location(location)
+            if job_loc_geocoded is not None:
+                folium.Marker(
+                    location=[job_loc_geocoded.latitude, job_loc_geocoded.longitude],
+                ).add_to(map_data_markers)
         temp_demo_map.save(in_memory_file, close_file=False)
         return in_memory_file
