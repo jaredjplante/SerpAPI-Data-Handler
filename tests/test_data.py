@@ -1,6 +1,11 @@
 import databaseutils
 import datautils
 import excelutils
+import guihandler
+
+import sys
+from PySide6.QtQuick import QQuickWindow, QSGRendererInterface
+from PySide6.QtWidgets import QApplication, QListWidget, QListWidgetItem, QWidget, QTextEdit, QLineEdit, QPushButton
 
 
 def test_web_data():
@@ -100,3 +105,24 @@ def test_check_old_tables():
     assert table_bool
 
     databaseutils.close_db(conn)
+
+
+def create_gui():
+    QQuickWindow.setGraphicsApi(QSGRendererInterface.GraphicsApi.Software)
+    qt_app = QApplication(sys.argv)
+    data = [["Software Engineer, Full Stack", "Capital One", "us, New York, NY 10012"],
+            ["Entry Level Java Developer", "SummitWorks Technologies Inc", "us, Boston, MA"],
+            ["Lead Software Engineer", "Free From Market", "us, Kansas City, MO"],  # $$$
+            ["Software Developer", "Atlas", " Anywhere "]]
+    window = guihandler.MainWindow(data)
+    window.keyword_input.setText("java")
+    window.location_filter.setText("new york")
+    window.salary_input.setText("150000")
+    # clicking the remote button will filter for remote jobs
+    return window
+
+
+def test_keyword():
+    job = guihandler.MainWindow.apply_keyword(create_gui())
+    assert len(job) == 1
+    assert job[0] == 'Entry Level Java Developer ||| SummitWorks Technologies Inc'

@@ -11,7 +11,7 @@ params = {
     "gl": "us",
     "location": "United States",
     "start": 0,
-    "api_key": secrets.secretkey
+    "api_key": secrets2.secretkey
 }
 
 

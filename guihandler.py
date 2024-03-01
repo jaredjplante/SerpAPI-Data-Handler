@@ -83,12 +83,16 @@ class MainWindow(QWidget):
 
 
     def apply_keyword(self):
+        jobs_to_keep = []
         keyword = self.keyword_input.text()
         for index in range(self.list_control.count()):
             item = self.list_control.item(index)
             item.setHidden(keyword.lower() not in item.text().lower())
-            #add map changes
+            if not self.list_control.item(index).isHidden():
+                job_text = self.list_control.item(index).text()
+                jobs_to_keep.append(job_text)
         self.map_filter()
+        return jobs_to_keep
 
 
 
@@ -107,6 +111,7 @@ class MainWindow(QWidget):
         for item in jobs_to_keep:
             list_item = QListWidgetItem(item, listview=self.list_control)
         self.map_filter()
+        return jobs_to_keep
 
 
     def apply_remote(self):
@@ -123,6 +128,7 @@ class MainWindow(QWidget):
         for item in jobs_to_keep:
             list_item = QListWidgetItem(item, listview=self.list_control)
         self.map_filter()
+        return jobs_to_keep
 
 
     def apply_salary(self):
@@ -154,6 +160,7 @@ class MainWindow(QWidget):
         for item in jobs_to_keep:
             list_item = QListWidgetItem(item, listview=self.list_control)
         self.map_filter()
+        return jobs_to_keep
 
     def map_filter(self):
         jobs_to_keep = []
