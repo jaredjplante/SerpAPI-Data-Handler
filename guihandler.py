@@ -6,9 +6,12 @@ from PySide6.QtWidgets import QApplication, QListWidget, QListWidgetItem, QWidge
 import mapwindow
 import databaseutils
 
+
 class job():
     def __init__(self, data_to_show):
         super().__init__()
+
+
 class MainWindow(QWidget):
     def __init__(self, data_to_show):
         super().__init__()
@@ -28,7 +31,7 @@ class MainWindow(QWidget):
 
     def setup_window(self):
         self.setWindowTitle("Software Developer Job Listings")
-        self.setGeometry(250,275,850,500)
+        self.setGeometry(250, 275, 850, 500)
         # job list
         list = QListWidget(self)
         self.list_control = list
@@ -44,6 +47,7 @@ class MainWindow(QWidget):
         # map creation
         self.mapwindow = mapwindow.mapwindow(self.maplist)
         # filters
+        # keyword
         self.keyword_input = QLineEdit(self)
         self.keyword_input.setPlaceholderText("Enter keyword here")
         self.keyword_input.setGeometry(600, 10, 180, 30)
@@ -52,6 +56,7 @@ class MainWindow(QWidget):
         self.filter_button.setGeometry(775, 10, 50, 30)
         self.filter_button.clicked.connect(self.apply_keyword)
 
+        # location
         self.location_filter = QLineEdit(self)
         self.location_filter.setPlaceholderText("Enter location here")
         self.location_filter.setGeometry(600, 50, 180, 30)
@@ -60,6 +65,7 @@ class MainWindow(QWidget):
         self.filter_button.setGeometry(775, 50, 50, 30)
         self.filter_button.clicked.connect(self.apply_location)
 
+        # remote
         self.remote_filter = QLineEdit(self)
         self.remote_filter.setPlaceholderText("Remote Search")
         self.remote_filter.setGeometry(600, 90, 180, 30)
@@ -68,6 +74,7 @@ class MainWindow(QWidget):
         self.filter_button.setGeometry(775, 90, 50, 30)
         self.filter_button.clicked.connect(self.apply_remote)
 
+        # salary
         self.salary_input = QLineEdit(self)
         self.salary_input.setPlaceholderText("Minimum salary: Enter int")
         self.salary_input.setGeometry(600, 130, 180, 30)
@@ -81,7 +88,6 @@ class MainWindow(QWidget):
         self.mapwindow.show()
         self.job_info.show()
 
-
     def apply_keyword(self):
         jobs_to_keep = []
         keyword = self.keyword_input.text()
@@ -93,8 +99,6 @@ class MainWindow(QWidget):
                 jobs_to_keep.append(job_text)
         self.map_filter()
         return jobs_to_keep
-
-
 
     def apply_location(self):
         jobs_to_keep = []
@@ -113,7 +117,6 @@ class MainWindow(QWidget):
         self.map_filter()
         return jobs_to_keep
 
-
     def apply_remote(self):
         jobs_to_keep = []
         for index in range(self.list_control.count()):
@@ -130,7 +133,6 @@ class MainWindow(QWidget):
         self.map_filter()
         return jobs_to_keep
 
-
     def apply_salary(self):
         jobs_to_keep = []
         salary = self.salary_input.text()
@@ -146,13 +148,7 @@ class MainWindow(QWidget):
                 data_values = item.split(" ||| ")
                 self.get_job_info(data_values[0], data_values[1])
                 self.job_info.clear()
-                try:
-                    int_compare_salary = int(self.salary)
-                except ValueError as e:
-                    try:
-                        int_compare_salary = int(self.mins)
-                    except ValueError as e:
-                        continue
+                int_compare_salary = self.apply_salary_helper()
                 if int_compare_salary > int_salary:
                     jobs_to_keep.append(f"{data_values[0]} ||| {data_values[1]}")
         self.list_control.clear()
@@ -160,6 +156,17 @@ class MainWindow(QWidget):
             list_item = QListWidgetItem(item, listview=self.list_control)
         self.map_filter()
         return jobs_to_keep
+
+    def apply_salary_helper(self):
+        int_compare_salary = 0
+        try:
+            int_compare_salary = int(self.salary)
+        except ValueError as e:
+            try:
+                int_compare_salary = int(self.mins)
+            except ValueError as e:
+                pass
+        return int_compare_salary
 
     def map_filter(self):
         jobs_to_keep = []
@@ -171,7 +178,6 @@ class MainWindow(QWidget):
                 self.job_info.clear()
                 jobs_to_keep.append(self.location)
         self.mapwindow.filter_map(jobs_to_keep)
-
 
     def write_job_info(self, selection):
         try:
@@ -196,11 +202,12 @@ class MainWindow(QWidget):
                            (title, company))
             self.qualifications = cursor.fetchone()
             self.job_info.setText(
-                f"Location: {self.location}, Age: {self.age}, Remote: {self.remote}, Salary: {self.salary} \n Qualifications: {self.qualifications}")
+                f"Location: {self.location}, Age: {self.age}, Remote: {self.remote}, Salary: {self.salary} \n "
+                f"Qualifications: {self.qualifications}")
         else:
             cursor.execute(
-                "SELECT location, posted_at, min_salary, max_salary, salary_time FROM listings_excel WHERE job_title = ? AND "
-                "company_name = ?",
+                "SELECT location, posted_at, min_salary, max_salary, salary_time FROM listings_excel WHERE job_title "
+                "= ? AND company_name = ?",
                 (title, company))
             results = cursor.fetchone()
             self.location, self.age, self.mins, self.maxs, self.salarytime = results
@@ -208,7 +215,8 @@ class MainWindow(QWidget):
             self.salary = "Not Specified"
             self.remote = "Not Specified"
             self.job_info.setText(
-                f"Location: {self.location}, Age: {self.age}, Remote: Not Specified, Salary: {self.mins} to {self.maxs} {self.salarytime}")
+                f"Location: {self.location}, Age: {self.age}, Remote: Not Specified, Salary: {self.mins} to "
+                f"{self.maxs} {self.salarytime}")
         databaseutils.close_db(conn)
 
 

@@ -5,7 +5,7 @@ import guihandler
 
 import sys
 from PySide6.QtQuick import QQuickWindow, QSGRendererInterface
-from PySide6.QtWidgets import QApplication, QListWidget, QListWidgetItem, QWidget, QTextEdit, QLineEdit, QPushButton
+from PySide6.QtWidgets import QApplication
 
 
 def test_web_data():
@@ -120,6 +120,7 @@ def create_gui():
     # clicking the remote button will filter for remote jobs
     return window
 
+
 def create_instance():
     if not QApplication.instance():
         qt_app = QApplication(sys.argv)
@@ -127,15 +128,17 @@ def create_instance():
         qt_app = QApplication.instance()
     return qt_app
 
+
 def test_get_job_titles():
     assert len(guihandler.get_job_titles()) > 700
+
+
 def test_keyword():
     qt_app = create_instance()
     job = guihandler.MainWindow.apply_keyword(create_gui())
     assert len(job) == 1
     assert job[0] == 'Entry Level Java Developer ||| SummitWorks Technologies Inc'
     qt_app.quit()
-
 
 
 def test_location():

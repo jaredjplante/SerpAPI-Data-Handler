@@ -20,7 +20,6 @@ class mapwindow(QWidget):
         self.layout = QVBoxLayout(self)
         self.webview = QWebEngineView()
 
-        #self.webview.setHtml(self.map.getvalue().decode("utf-8"))
         self.layout.addWidget(self.webview)
         self.setLayout(self.layout)
         self.resize(800, 800)
@@ -33,6 +32,7 @@ class mapwindow(QWidget):
     def update_map(self):
         self.map = self.build_map()
         self.webview.setHtml(self.map.getvalue().decode("utf-8"))
+
     @lru_cache(maxsize=750)
     def geocode_location(self, location):
         geolocator = Nominatim(user_agent="MapSprint4")
