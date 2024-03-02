@@ -49,6 +49,7 @@ jobs:
         # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
         flake8 . --count --max-complexity=10 --max-line-length=127 --extend-ignore=F841 --statistics
     - uses: tlambert03/setup-qt-libs@v1
+    # https://stackoverflow.com/questions/75497408/github-action-pytest-exit-code-134/75503402#75503402?newreg=3d4559220fca4f84b10ac5ba76113871
     - name: build "display"
       run: |
         /sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- :99 -screen 0 1920x1200x24 -ac +extension GLX
