@@ -30,7 +30,7 @@ jobs:
         echo 'secretkey = "'$API_KEY'"' >> secrets2.py
     - name: Install libgl1
       run: |
-        apt-get update && apt-get install libgl1
+        apt-get install libgl1
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
