@@ -28,11 +28,13 @@ jobs:
         API_KEY: ${{ secrets.SERPAPI_KEY }}
       run: |
         echo 'secretkey = "'$API_KEY'"' >> secrets2.py
-    - name: Install libgl1
-      run: |
-        apt-get install libgl1
+#    - name: Install libgl1
+#      run: |
+#        apt-get install libgl1
     - name: Install dependencies
       run: |
+        sudo apt-get update
+        sudo apt-get install -y libegl1
         python -m pip install --upgrade pip
         pip install flake8 pytest
         if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
