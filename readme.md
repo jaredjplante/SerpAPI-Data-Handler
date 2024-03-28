@@ -1,5 +1,3 @@
-Jared Plante Project 1
-
 Requires:\
 Install all packages inside requirements.txt\
 pip install [package name]
