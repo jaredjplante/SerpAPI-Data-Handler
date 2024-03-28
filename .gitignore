@@ -5,3 +5,4 @@ git-push.sh
 tests/.pytest_cache
 __pycache__
 tests/__pycache__
+.idea
